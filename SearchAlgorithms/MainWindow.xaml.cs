@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,10 @@ namespace SearchAlgorithms
             InitializeComponent();
         }
 
+        string text = "";
+        static string searchText = "";
+        bool isLoaded = false;
+
         private void Select_Click(object sender, RoutedEventArgs e)
         {
             string pathToFile = "";
@@ -39,20 +44,81 @@ namespace SearchAlgorithms
 
             if (File.Exists(pathToFile))
             {
-                //method1
-                string firstLine = File.ReadAllLines(pathToFile).Skip(0).Take(1).First();
-                string secondLine = File.ReadAllLines(pathToFile).Skip(1).Take(1).First();
-
-                //method2
-                string text = "";
                 using (StreamReader sr = new StreamReader(pathToFile))
                 {
                     text = sr.ReadToEnd();
-
-                    MessageBox.Show(text);
+                    isLoaded = true;
                     isLoadedText.Content = "Loaded";
                 }
             }
+        }
+
+        private void Brute_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isLoaded) return;
+            searchText = searchTextBox.Text;
+            bool finished = false;
+            // Not Finished
+            if (finished) 
+            {
+                timeLength.Content = "Finished";
+            } else {
+                timeLength.Content = "Not Finished";
+            } 
+        }
+
+        private void Preview_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(text, "Text Preview");
+        }
+
+        private void KMP_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isLoaded) return;
+            var stopwatch = new Stopwatch();
+            searchText = searchTextBox.Text;
+            timeLength.Content = "0 ms";
+            stopwatch.Start();
+            for (int j = 0; j < int.Parse(repeatAmount.Text); j++)
+            {
+                int M = searchText.Length;
+                int N = text.Length;
+                int[] KMPNext = new int[M + 1];
+                int i, b, pp;
+
+                KMPNext[0] = b = -1;
+                for (i = 1; i <= M; i++)
+                {
+                    while ((b > -1) && (searchText[b] != searchText[i - 1]))
+                    {
+                        b = KMPNext[b];
+                    }
+                    ++b;
+                    if ((i == M) || (searchText[i] != searchText[b]))
+                    {
+                        KMPNext[i] = b;
+                    }
+                    else
+                    {
+                        KMPNext[i] = KMPNext[b];
+                    }
+                }
+
+                pp = b = 0;
+                for (i = 0; i < N; i++)
+                {
+                    while ((b > -1) && (searchText[b] != text[i]))
+                    {
+                        b = KMPNext[b];
+                    }
+                    if (++b == M)
+                    {
+                        b = KMPNext[b];
+                    }
+                }
+            }
+            stopwatch.Stop();
+            timeLength.Content = stopwatch.ElapsedMilliseconds.ToString()+" ms";
         }
     }
 }
