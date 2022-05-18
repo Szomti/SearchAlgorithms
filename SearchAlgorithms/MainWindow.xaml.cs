@@ -29,6 +29,22 @@ namespace SearchAlgorithms
         static string searchText = "";
         bool isLoaded = false;
 
+        bool usedBrute = false;
+        long minBrute = long.MaxValue;
+        long maxBrute = long.MinValue;
+
+        bool usedKMP = false;
+        long minKMP = long.MaxValue;
+        long maxKMP = long.MinValue;
+
+        bool usedBoyer = false;
+        long minBoyer = long.MaxValue;
+        long maxBoyer = long.MinValue;
+
+        bool usedRabin = false;
+        long minRabin = long.MaxValue;
+        long maxRabin = long.MinValue;
+
         private void Select_Click(object sender, RoutedEventArgs e)
         {
             string pathToFile = "";
@@ -56,15 +72,26 @@ namespace SearchAlgorithms
         private void Brute_Click(object sender, RoutedEventArgs e)
         {
             if (!isLoaded) return;
+            var stopwatch = new Stopwatch();
             searchText = searchTextBox.Text.ToUpper();
-            bool finished = false;
-            // Not Finished
-            if (finished) 
+            timeLength.Content = "0 ms";
+            stopwatch.Start();
+            for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
-                timeLength.Content = "Finished";
-            } else {
-                timeLength.Content = "Not Finished";
-            } 
+                // Not Finished
+            }
+            stopwatch.Stop();
+            timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
+            if (stopwatch.ElapsedMilliseconds < minBrute)
+            {
+                minBrute = stopwatch.ElapsedMilliseconds;
+            }
+            if (stopwatch.ElapsedMilliseconds > maxBrute)
+            {
+                maxBrute = stopwatch.ElapsedMilliseconds;
+            }
+            stopwatch.Reset();
+            usedBrute = true;
         }
 
         private void Preview_Click(object sender, RoutedEventArgs e)
@@ -119,7 +146,16 @@ namespace SearchAlgorithms
             }
             stopwatch.Stop();
             timeLength.Content = stopwatch.ElapsedMilliseconds.ToString()+" ms";
+            if (stopwatch.ElapsedMilliseconds < minKMP)
+            {
+                minKMP = stopwatch.ElapsedMilliseconds;
+            }
+            if(stopwatch.ElapsedMilliseconds > maxKMP)
+            {
+                maxKMP = stopwatch.ElapsedMilliseconds;
+            }
             stopwatch.Reset();
+            usedKMP = true;
         }
 
         private void Boyer_Click(object sender, RoutedEventArgs e)
@@ -168,7 +204,16 @@ namespace SearchAlgorithms
             }
             stopwatch.Stop();
             timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
+            if (stopwatch.ElapsedMilliseconds < minBoyer)
+            {
+                minBoyer = stopwatch.ElapsedMilliseconds;
+            }
+            if (stopwatch.ElapsedMilliseconds > maxBoyer)
+            {
+                maxBoyer = stopwatch.ElapsedMilliseconds;
+            }
             stopwatch.Reset();
+            usedBoyer = true;
         }
 
         private int h(string x)
@@ -220,7 +265,49 @@ namespace SearchAlgorithms
             }
             stopwatch.Stop();
             timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
+            if (stopwatch.ElapsedMilliseconds < minRabin)
+            {
+                minRabin = stopwatch.ElapsedMilliseconds;
+            }
+            if (stopwatch.ElapsedMilliseconds > maxRabin)
+            {
+                maxRabin = stopwatch.ElapsedMilliseconds;
+            }
             stopwatch.Reset();
+            usedRabin = true;
+        }
+
+        private void Check_Click(object sender, RoutedEventArgs e)
+        {
+            string bruteTimes = "Brute Force\n" + "Min: " + minBrute.ToString() + " ms\nMax: " + maxBrute.ToString() + " ms\n\n";
+            string KMPTimes = "KMP\n" + "Min: " + minKMP.ToString() + " ms\nMax: " + maxKMP.ToString() + " ms\n\n";
+            string boyerTimes = "Boyera-Moore'a\n" + "Min: " + minBoyer.ToString() + " ms\nMax: " + maxBoyer.ToString() + " ms\n\n";
+            string rabinTimes = "Rabina-Karpa\n" + "Min: " + minRabin.ToString() + " ms\nMax: " + maxRabin.ToString() + " ms\n\n";
+            if (!usedBrute) bruteTimes = "";
+            if (!usedKMP) KMPTimes = "";
+            if (!usedBoyer) boyerTimes = "";
+            if (!usedRabin) rabinTimes = "";
+            string checkTimes = bruteTimes + KMPTimes + boyerTimes + rabinTimes;
+            MessageBox.Show(checkTimes, "Check Times");
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            usedBrute = false;
+            minBrute = long.MaxValue;
+            maxBrute = long.MinValue;
+
+            usedKMP = false;
+            minKMP = long.MaxValue;
+            maxKMP = long.MinValue;
+
+            usedBoyer = false;
+            minBoyer = long.MaxValue;
+            maxBoyer = long.MinValue;
+
+            usedRabin = false;
+            minRabin = long.MaxValue;
+            maxRabin = long.MinValue;
         }
     }
 }
