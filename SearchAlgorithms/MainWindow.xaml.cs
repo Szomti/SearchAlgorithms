@@ -54,17 +54,32 @@ namespace SearchAlgorithms
             dialog.InitialDirectory = @"C:\";
             if (dialog.ShowDialog() == true)
             {
-                MessageBox.Show(dialog.FileName.ToString());
-                pathToFile = dialog.FileName;
+                MessageBoxResult result = MessageBox.Show(dialog.FileName.ToString(), "File path", MessageBoxButton.OKCancel);
+                switch (result)
+                {
+                    case MessageBoxResult.OK:
+                        pathToFile = dialog.FileName;
+                        break;
+                    case MessageBoxResult.Cancel:
+                        break;
+                }
             }
 
             if (File.Exists(pathToFile))
             {
                 using (StreamReader sr = new StreamReader(pathToFile))
                 {
-                    text = sr.ReadToEnd().ToUpper();
+                    string tempText = sr.ReadToEnd();
+                    if (tempText.Trim() == "")
+                    {
+                        MessageBox.Show("File is empty or contains only whitespaces!");
+                        return;
+                    }
+                    text = tempText.ToUpper();
                     isLoaded = true;
                     isLoadedText.Content = "Loaded";
+                    isLoadedText.Foreground = Brushes.Green;
+                    previewText.IsEnabled = true;
                 }
             }
         }
@@ -92,10 +107,12 @@ namespace SearchAlgorithms
 
         private void Brute_Click(object sender, RoutedEventArgs e)
         {
+            if (searchTextBox.Text == "") return;
             if (!isLoaded) return;
             var stopwatch = new Stopwatch();
             searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
+            if (repeatAmount.Text == "") repeatAmount.Text = "1";
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
@@ -117,10 +134,12 @@ namespace SearchAlgorithms
 
         private void KMP_Click(object sender, RoutedEventArgs e)
         {
+            if (searchTextBox.Text == "") return;
             if (!isLoaded) return;
             var stopwatch = new Stopwatch();
             searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
+            if (repeatAmount.Text == "") repeatAmount.Text = "1";
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
@@ -176,10 +195,12 @@ namespace SearchAlgorithms
 
         private void Boyer_Click(object sender, RoutedEventArgs e)
         {
+            if (searchTextBox.Text == "") return;
             if (!isLoaded) return;
             var stopwatch = new Stopwatch();
             searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
+            if (repeatAmount.Text == "") repeatAmount.Text = "1";
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
@@ -244,13 +265,14 @@ namespace SearchAlgorithms
             return hx;
         }
 
-
         private void Rabin_Click(object sender, RoutedEventArgs e)
         {
+            if (searchTextBox.Text == "") return;
             if (!isLoaded) return;
             var stopwatch = new Stopwatch();
             searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
+            if (repeatAmount.Text == "") repeatAmount.Text = "1";
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
@@ -304,6 +326,7 @@ namespace SearchAlgorithms
             if (!usedBoyer) boyerTimes = "";
             if (!usedRabin) rabinTimes = "";
             string checkTimes = bruteTimes + KMPTimes + boyerTimes + rabinTimes;
+            if (checkTimes == "") checkTimes = "No saved times";
             MessageBox.Show(checkTimes, "Check Times");
         }
 
@@ -324,6 +347,18 @@ namespace SearchAlgorithms
             usedRabin = false;
             minRabin = long.MaxValue;
             maxRabin = long.MinValue;
+        }
+
+        private void searchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (searchTextBox.Text == "")
+            {
+                keywordText.Foreground = Brushes.Red;
+            }
+            else
+            {
+                keywordText.Foreground = Brushes.Green;
+            }
         }
     }
 }
