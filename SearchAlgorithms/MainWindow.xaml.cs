@@ -25,7 +25,8 @@ namespace SearchAlgorithms
             InitializeComponent();
         }
 
-        static string text = "";
+        string pathToFile = "";
+        static string rawText = "";
         static string searchText = "";
         bool isLoaded = false;
 
@@ -47,7 +48,6 @@ namespace SearchAlgorithms
 
         private void Select_Click(object sender, RoutedEventArgs e)
         {
-            string pathToFile = "";
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "Open Text File";
             dialog.Filter = "TXT files|*.txt";
@@ -75,7 +75,7 @@ namespace SearchAlgorithms
                         MessageBox.Show("File is empty or contains only whitespaces!");
                         return;
                     }
-                    text = tempText.ToUpper();
+                    rawText = tempText;
                     isLoaded = true;
                     isLoadedText.Content = "Loaded";
                     isLoadedText.Foreground = Brushes.Green;
@@ -86,7 +86,7 @@ namespace SearchAlgorithms
 
         private void Preview_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(text, "Text Preview");
+            MessageBox.Show(rawText, System.IO.Path.GetFileName(pathToFile));
         }
 
         private int BruteForce(String searchText, String text)
@@ -116,7 +116,7 @@ namespace SearchAlgorithms
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
-                BruteForce(searchText, text);
+                BruteForce(searchText, rawText.ToUpper());
             }
             stopwatch.Stop();
             timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
@@ -140,11 +140,12 @@ namespace SearchAlgorithms
             searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
             if (repeatAmount.Text == "") repeatAmount.Text = "1";
+            string text = rawText.ToUpper();
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
                 int M = searchText.Length;
-                int N = text.Length;
+                int N = rawText.Length;
                 int[] KMPNext = new int[M + 1];
                 int i, b, pp;
 
@@ -201,11 +202,12 @@ namespace SearchAlgorithms
             searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
             if (repeatAmount.Text == "") repeatAmount.Text = "1";
+            string text = rawText.ToUpper();
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
                 int M = searchText.Length;
-                int N = text.Length;
+                int N = rawText.Length;
                 int zp = 0;
                 int zk = 90;
 
@@ -273,11 +275,12 @@ namespace SearchAlgorithms
             searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
             if (repeatAmount.Text == "") repeatAmount.Text = "1";
+            string text = rawText.ToUpper();
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
                 int M = searchText.Length;
-                int N = text.Length;
+                int N = rawText.Length;
                 int pp, i, Hp, Hs;
 
                 Hp = h(searchText);
