@@ -5,10 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SearchAlgorithms"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="Start" HorizontalAlignment="Left" Margin="10" Width="75px" Padding="8" VerticalAlignment="Top"/>
-        <Button Content="Select" HorizontalAlignment="Left" Margin="10,50,0,0" Width="75px" Padding="8" VerticalAlignment="Top" Click="Select_Click"/>
-        <Label x:Name="isLoadedText" Content="Not Loaded" HorizontalAlignment="Left" Margin="10,90,0,0" Width="75px" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+        Title="MainWindow" Height="153" Width="482">
+    <Grid Margin="0,0,10,-6">
+        <Button Content="Select" HorizontalAlignment="Left" Margin="10,100,0,0" Height="25px" Width="75px" VerticalContentAlignment="Center" VerticalAlignment="Top" Click="Select_Click"/>
+        <Label x:Name="isLoadedText" Content="Not Loaded" HorizontalAlignment="Left" Margin="10,69,0,0" Width="75px" VerticalAlignment="Top" HorizontalContentAlignment="Center"/>
+        <TextBox HorizontalAlignment="Left" Margin="112,10,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Height="25px" Width="250px" VerticalContentAlignment="Center"/>
+        <Label Content="Search Keyword:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="25px" VerticalContentAlignment="Center"/>
+        <Button Content="Brute Force" HorizontalAlignment="Left" Margin="367,10,0,0" VerticalAlignment="Top" Height="25px" Width="100px" VerticalContentAlignment="Center"/>
+        <Button Content="KMP" HorizontalAlignment="Left" Margin="367,40,0,0" VerticalAlignment="Top" Height="25px" Width="100px" VerticalContentAlignment="Center"/>
+        <Button Content="Boyera-Moore'a" HorizontalAlignment="Left" Margin="367,70,0,0" VerticalAlignment="Top" Height="25px" Width="100px" VerticalContentAlignment="Center"/>
+        <Button Content="Rabina Karpa" HorizontalAlignment="Left" Margin="367,100,0,0" VerticalAlignment="Top" Height="25px" Width="100px" VerticalContentAlignment="Center"/>
+        <Label Content="Time:" HorizontalAlignment="Left" Margin="10,40,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+        <Label Content="0 ms" HorizontalAlignment="Left" Margin="50,40,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalContentAlignment="Left" Width="50px"/>
     </Grid>
 </Window>
