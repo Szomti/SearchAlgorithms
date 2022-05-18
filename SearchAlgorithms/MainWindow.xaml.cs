@@ -46,7 +46,7 @@ namespace SearchAlgorithms
             {
                 using (StreamReader sr = new StreamReader(pathToFile))
                 {
-                    text = sr.ReadToEnd();
+                    text = sr.ReadToEnd().ToUpper();
                     isLoaded = true;
                     isLoadedText.Content = "Loaded";
                 }
@@ -56,7 +56,7 @@ namespace SearchAlgorithms
         private void Brute_Click(object sender, RoutedEventArgs e)
         {
             if (!isLoaded) return;
-            searchText = searchTextBox.Text;
+            searchText = searchTextBox.Text.ToUpper();
             bool finished = false;
             // Not Finished
             if (finished) 
@@ -76,10 +76,10 @@ namespace SearchAlgorithms
         {
             if (!isLoaded) return;
             var stopwatch = new Stopwatch();
-            searchText = searchTextBox.Text;
+            searchText = searchTextBox.Text.ToUpper();
             timeLength.Content = "0 ms";
             stopwatch.Start();
-            for (int j = 0; j < int.Parse(repeatAmount.Text); j++)
+            for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
                 int M = searchText.Length;
                 int N = text.Length;
@@ -119,6 +119,58 @@ namespace SearchAlgorithms
             }
             stopwatch.Stop();
             timeLength.Content = stopwatch.ElapsedMilliseconds.ToString()+" ms";
+            stopwatch.Reset();
+        }
+
+        private void Boyer_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isLoaded) return;
+            var stopwatch = new Stopwatch();
+            searchText = searchTextBox.Text.ToUpper();
+            timeLength.Content = "0 ms";
+            stopwatch.Start();
+            for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
+            {
+                int M = searchText.Length;
+                int N = text.Length;
+                int zp = 0;
+                int zk = 90;
+
+                int[] Last = new int[zk - zp + 1];
+                int i;
+                int j;
+                int pp;
+                for (i = 0; i <= zk - zp; i++)
+                {
+                    Last[i] = -1;
+                }
+                for (i = 0; i < M; i++)
+                {
+                    Last[searchText[i] - zp] = i;
+                }
+
+                pp = i = 0;
+                while (i <= N - M)
+                {
+                    j = M - 1;
+                    while ((j > -1) && (searchText[j] == text[i + j]))
+                    {
+                        j--;
+                    }
+                    if (j == -1)
+                    {
+                        pp++;
+                        i++;
+                    }
+                    else
+                    {
+                        i += Math.Max(1, j - Last[text[i + j] - zp]);
+                    }
+                }
+            }
+            stopwatch.Stop();
+            timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
+            stopwatch.Reset();
         }
     }
 }
