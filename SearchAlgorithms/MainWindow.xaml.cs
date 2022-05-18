@@ -69,6 +69,27 @@ namespace SearchAlgorithms
             }
         }
 
+        private void Preview_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show(text, "Text Preview");
+        }
+
+        private int BruteForce(String searchText, String text)
+        {
+            int M = searchText.Length;
+            int N = text.Length;
+            for (int i = 0; i <= N - M; i++)
+            {
+                int j;
+                for (j = 0; j < M; j++)
+                {
+                    if (text[i + j] != searchText[j]) break;
+                }
+                if (j == M) return i;
+            }
+            return N;
+        }
+
         private void Brute_Click(object sender, RoutedEventArgs e)
         {
             if (!isLoaded) return;
@@ -78,7 +99,7 @@ namespace SearchAlgorithms
             stopwatch.Start();
             for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
             {
-                // Not Finished
+                BruteForce(searchText, text);
             }
             stopwatch.Stop();
             timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
@@ -92,11 +113,6 @@ namespace SearchAlgorithms
             }
             stopwatch.Reset();
             usedBrute = true;
-        }
-
-        private void Preview_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show(text, "Text Preview");
         }
 
         private void KMP_Click(object sender, RoutedEventArgs e)
