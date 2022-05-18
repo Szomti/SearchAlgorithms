@@ -25,7 +25,7 @@ namespace SearchAlgorithms
             InitializeComponent();
         }
 
-        string text = "";
+        static string text = "";
         static string searchText = "";
         bool isLoaded = false;
 
@@ -137,9 +137,7 @@ namespace SearchAlgorithms
                 int zk = 90;
 
                 int[] Last = new int[zk - zp + 1];
-                int i;
-                int j;
-                int pp;
+                int i, j, pp;
                 for (i = 0; i <= zk - zp; i++)
                 {
                     Last[i] = -1;
@@ -167,6 +165,58 @@ namespace SearchAlgorithms
                         i += Math.Max(1, j - Last[text[i + j] - zp]);
                     }
                 }
+            }
+            stopwatch.Stop();
+            timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
+            stopwatch.Reset();
+        }
+
+        private int h(string x)
+        {
+            int i, hx;
+
+            hx = 0;
+            for (i = 0; i < searchText.Length; i++)
+            {
+                hx = 3 * hx + (x[i] - 65);
+            }
+            return hx;
+        }
+
+
+        private void Rabin_Click(object sender, RoutedEventArgs e)
+        {
+            if (!isLoaded) return;
+            var stopwatch = new Stopwatch();
+            searchText = searchTextBox.Text.ToUpper();
+            timeLength.Content = "0 ms";
+            stopwatch.Start();
+            for (long repeat = 0; repeat < long.Parse(repeatAmount.Text); repeat++)
+            {
+                int M = searchText.Length;
+                int N = text.Length;
+                int pp, i, Hp, Hs;
+
+                Hp = h(searchText);
+
+                Hs = h(text);
+
+                pp = i = 0;
+
+                while (true)
+                {
+                    if ((Hp == Hs) && (searchText == text.Substring(i, M)))
+                    {
+                        pp++;
+                    }
+                    i++;
+                    if (i == N - M)
+                    {
+                        break;
+                    }
+                    Hs = (Hs - (text[i - 1] - 65) * 27) * 3 + text[i + M - 1] - 65;
+                }
+
             }
             stopwatch.Stop();
             timeLength.Content = stopwatch.ElapsedMilliseconds.ToString() + " ms";
